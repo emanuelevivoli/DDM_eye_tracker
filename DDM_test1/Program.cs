@@ -17,7 +17,7 @@ namespace DDM_test1
         // 
         // CHANGE WITH YOURS THIS TWO PATHS
         //
-        private static string path_base = @"C:\Users\lello\Source\Repos\";           
+        private static string path_base   = @"C:\Users\lello\Source\Repos\";           
         private static string python_path = @"C:\Users\lello\AppData\Local\Programs\Python\Python37\python.exe";  
 
 
@@ -29,9 +29,9 @@ namespace DDM_test1
         {
             // create host stream for Tobii
             _host = new Host();
+
             // _gazePointDataStream = _host.Streams.CreateGazePointDataStream();
             _fixationDataStream = _host.Streams.CreateFixationDataStream();
-            ToggleFixationDataStream();
             
             // set params to save streams on file
             string gaze_path = "gazeStream.csv";
@@ -42,7 +42,7 @@ namespace DDM_test1
             stream_read_write(path_to_py, gaze_path, fixs_path);
 
 
-            Console.Write("----------------------------------------------------------------------------------------------------------------------------------------");
+            Console.Write("----------------------------------------------------------------------------------------------------");
             Console.ReadKey();
             
         }
@@ -68,48 +68,46 @@ namespace DDM_test1
             using (StreamWriter writer = process.StandardInput)
             using (StreamReader reader = process.StandardOutput)
             {
+                // string all_paths = stream_path + count.ToString() + gaze_path + " " + stream_path + count.ToString() + fixs_path;
+                string all_paths = stream_path + fixs_path;
+                writer.WriteLine(all_paths);
+                
+                // StreamWriter gaze_outputFile = new StreamWriter(stream_path + count.ToString() + gaze_path);
+                // StreamWriter fixation_outputFile = new StreamWriter(stream_path + count.ToString() + fixs_path);
+
+                StreamWriter fixation_outputFile = new StreamWriter(all_paths);
+
+                stream_on_file(fixation_outputFile); //gaze_outputFile);
+
+                Console.WriteLine("written: " + all_paths);
+
                 while (flag)
                 {
-                    string all_paths = stream_path + count.ToString() + gaze_path + " " + stream_path + count.ToString() + fixs_path;
-                    writer.WriteLine(all_paths);
-
-                    // StreamWriter gaze_outputFile = new StreamWriter(stream_path + count.ToString() + gaze_path);
-                    StreamWriter fixation_outputFile = new StreamWriter(stream_path + count.ToString() + fixs_path);
-                    
-                    // if (!_gazePointDataStream.IsEnabled)
-                    //     ToggleGazePointDataStream(_gazePointDataStream);
-                    
-                    // if (! _fixationDataStream .IsEnabled)
-                    //     ToggleGazePointDataStream(_fixationDataStream);
-                    ToggleFixationDataStream();
-
-                    stream_on_file(fixation_outputFile); //gaze_outputFile);
-
-                    Console.WriteLine("written: " + all_paths);
-
                     string result = null;
 
                     while (result == null || result.Length == 0)
                     { result = reader.ReadLine(); }
 
-                    if (System.Text.RegularExpressions.Regex.Match(result, @"\bACK\b").Length > 0)
+                    if (result.Contains("PHOTO_"))
                     {
                         count = Int32.Parse(System.Text.RegularExpressions.Regex.Match(result, @"\d+").Value);
+                        Console.WriteLine("viewing: " + result + "\n");
                     }
                     else
                     {
                         flag = false;
+                        Console.WriteLine("receive: "+ result +"\n");
                     }
+                    fixation_outputFile.WriteLine(result + ",-,-,-");
                     
-                    ToggleFixationDataStream();
+                    // ToggleFixationDataStream();
                     // gaze_outputFile.Close();
-                    fixation_outputFile.Close();
+                    
 
-                    Console.WriteLine("read: " + result + "\n");
-                    count = count + 1;
-                    Console.WriteLine(string.Format("calculate next: {0}", count));
+                    // Console.WriteLine("viewing: " + result + "\n");
 
                 }
+                fixation_outputFile.Close();
             }
         }
 

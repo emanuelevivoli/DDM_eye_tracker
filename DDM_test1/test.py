@@ -3,20 +3,18 @@ import time
 MAX_ = 7
 i = 0
 
-while i < MAX_:
-    input = sys.stdin.readline()
-    app = str(input).split(" ")
+''' input <- path with all data stored '''
+input = sys.stdin.readline()
+app = str(input)
+fixation_name = str(app.split("\\")[-1])
 
-    time.sleep(3)
-    
-    print("ACK "+str(app[0].split("\\")[-1])+" "+str(app[1].split("\\")[-1]))
+while i < MAX_: 
+
+    print("PHOTO_"+str(i))
     sys.stdout.flush()
-
+    time.sleep(3)
     i = i+1
 
-input = sys.stdin.readline()
 
-time.sleep(3)
-    
 print("END")
 sys.stdout.flush()
