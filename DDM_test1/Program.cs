@@ -14,9 +14,15 @@ namespace DDM_test1
         private static FixationDataStream _fixationDataStream;
         private static DateTime _fixationBeginTime = default(DateTime);
 
-        private static string path_base   = @"C:\Users\lello\Source\Repos\DDM_eye_tracker\DDM_test1\Streams\";
-        private static string python_path = @"C:\Users\lello\AppData\Local\Programs\Python\Python37\python.exe";  //"C:\\Python27\\python.exe";
-        private static string path        = @"C:\Users\lello\source\repos\DDM_eye_tracker\DDM_test1\test.py";
+        // 
+        // CHANGE WITH YOURS THIS TWO PATHS
+        //
+        private static string path_base = @"C:\Users\lello\Source\Repos\";           
+        private static string python_path = @"C:\Users\lello\AppData\Local\Programs\Python\Python37\python.exe";  
+
+
+        private static string stream_path   = path_base + @"DDM_eye_tracker\DDM_test1\Streams\";
+        private static string path_to_py    = path_base + @"DDM_eye_tracker\DDM_test1\test.py";
 
 
         public static void Main(string[] args)
@@ -33,7 +39,7 @@ namespace DDM_test1
 
 
             // call for save on file function
-            stream_read_write(path, gaze_path, fixs_path);
+            stream_read_write(path_to_py, gaze_path, fixs_path);
 
 
             Console.Write("----------------------------------------------------------------------------------------------------------------------------------------");
@@ -44,12 +50,12 @@ namespace DDM_test1
         
 
 
-        private static void stream_read_write(string path, string gaze_path, string fixs_path)
+        private static void stream_read_write(string path_to_py, string gaze_path, string fixs_path)
         {
             ProcessStartInfo start = new ProcessStartInfo();
 
             start.FileName = python_path; 
-            start.Arguments = string.Format("{0}", path);
+            start.Arguments = string.Format("{0}", path_to_py);
             start.UseShellExecute = false;
             start.RedirectStandardOutput = true;
             start.RedirectStandardInput = true;
@@ -64,11 +70,11 @@ namespace DDM_test1
             {
                 while (flag)
                 {
-                    string all_paths = path_base + count.ToString() + gaze_path + " " + path_base + count.ToString() + fixs_path;
+                    string all_paths = stream_path + count.ToString() + gaze_path + " " + stream_path + count.ToString() + fixs_path;
                     writer.WriteLine(all_paths);
 
-                    // StreamWriter gaze_outputFile = new StreamWriter(path_base + count.ToString() + gaze_path);
-                    StreamWriter fixation_outputFile = new StreamWriter(path_base + count.ToString() + fixs_path);
+                    // StreamWriter gaze_outputFile = new StreamWriter(stream_path + count.ToString() + gaze_path);
+                    StreamWriter fixation_outputFile = new StreamWriter(stream_path + count.ToString() + fixs_path);
                     
                     // if (!_gazePointDataStream.IsEnabled)
                     //     ToggleGazePointDataStream(_gazePointDataStream);
@@ -109,8 +115,8 @@ namespace DDM_test1
 
         private static void stream_on_file(StreamWriter fixation_outputFile) //, StreamWriter gaze_outputFile
         {
-            // StreamWriter gaze_outputFile = new StreamWriter(Path.Combine(path_base, gaze_path));
-            // StreamWriter fixation_outputFile = new StreamWriter(Path.Combine(path_base, fixs_path));
+            // StreamWriter gaze_outputFile = new StreamWriter(Path.Combine(stream_path, gaze_path));
+            // StreamWriter fixation_outputFile = new StreamWriter(Path.Combine(stream_path, fixs_path));
 
             /* 
             
@@ -126,26 +132,26 @@ namespace DDM_test1
             _fixationDataStream
             .Begin((x, y, _) =>
             {
-                // Console.WriteLine("\n" + "Fixation started at X: {0}, Y: {1}", x, y);
+                        // Console.WriteLine("\n" + "Fixation started at X: {0}, Y: {1}", x, y);
                 fixation_outputFile.WriteLine("FS,{0},{1},-", x, y);
-                Console.WriteLine("FS,{0},{1},-", x, y);
+                // Console.WriteLine("FS,{0},{1},-", x, y);
                 _fixationBeginTime = DateTime.Now;
             })
             .Data((x, y, _) =>
             {
-                // Console.WriteLine("During fixation, currently at: X: {0}, Y: {1}", x, y);
+                        // Console.WriteLine("During fixation, currently at: X: {0}, Y: {1}", x, y);
                 fixation_outputFile.WriteLine("DF,{0},{1},-", x, y);
-                Console.WriteLine("DF,{0},{1},-", x, y);
+                // Console.WriteLine("DF,{0},{1},-", x, y);
             })
             .End((x, y, _) =>
             {
                 fixation_outputFile.WriteLine("FE,{0},{1},-", x, y);
-                Console.WriteLine("FE,{0},{1},-", x, y);
+                // Console.WriteLine("FE,{0},{1},-", x, y);
                 if (_fixationBeginTime != default(DateTime))
                 {
-                    // Console.WriteLine("Fixation duration: {0}", DateTime.Now - _fixationBeginTime);
+                            // Console.WriteLine("Fixation duration: {0}", DateTime.Now - _fixationBeginTime);
                     fixation_outputFile.WriteLine("TIME,-,-,{0}", DateTime.Now - _fixationBeginTime);
-                    Console.WriteLine("TIME,-,-,{0}", DateTime.Now - _fixationBeginTime);
+                    // Console.WriteLine("TIME,-,-,{0}", DateTime.Now - _fixationBeginTime);
                 }
             });
 
