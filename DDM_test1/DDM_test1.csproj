@@ -77,9 +77,6 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="Tobii\API-Reference.pdf" />
-    <None Include="Tobii\SDK-License_en.pdf" />
-    <None Include="Tobii\SDK-License_zh.pdf" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
