@@ -262,3 +262,4 @@ __pycache__/
 
 # Stream files about fixations and gaze 
 *.txt
+*.csv
