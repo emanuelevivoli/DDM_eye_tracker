@@ -3,7 +3,6 @@ import time
 MAX_ = 7
 i = 0
 
-''' input <- path with all data stored '''
 input = sys.stdin.readline()
 app = str(input)
 fixation_name = str(app.split("\\")[-1])

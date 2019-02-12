@@ -88,15 +88,15 @@ namespace DDM_test1
                     while (result == null || result.Length == 0)
                     { result = reader.ReadLine(); }
 
-                    if (result.Contains("PHOTO_"))
+                    if (result.Contains("END"))
                     {
-                        count = Int32.Parse(System.Text.RegularExpressions.Regex.Match(result, @"\d+").Value);
-                        Console.WriteLine("viewing: " + result + "\n");
+                        flag = false;
+                        Console.WriteLine("receive: " + result + "\n"); 
                     }
                     else
                     {
-                        flag = false;
-                        Console.WriteLine("receive: "+ result +"\n");
+                        count = Int32.Parse(System.Text.RegularExpressions.Regex.Match(result, @"\d+").Value);
+                        Console.WriteLine("photo name: " + result + "\n");
                     }
                     fixation_outputFile.WriteLine(result + ",-,-,-");
                     
