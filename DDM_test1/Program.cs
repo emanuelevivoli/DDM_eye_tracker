@@ -22,7 +22,7 @@ namespace DDM_test1
 
 
         private static string stream_path   = path_base + @"DDM_eye_tracker\DDM_test1\Streams\";
-        private static string path_to_py    = path_base + @"DDM_eye_tracker\DDM_test1\test.py";
+        private static string path_to_py    = path_base + @"DDM_eye_tracker\DDM_test1\test_complete.py";
 
 
         public static void Main(string[] args)
